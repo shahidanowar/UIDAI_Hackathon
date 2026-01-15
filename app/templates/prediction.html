@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Prediction{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prediction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="prediction-container">
+    <!-- Header -->
+    <div class="prediction-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="title-icon">🎯</span>
+                ML Risk Prediction
+            </h1>
+            <p class="page-subtitle">Predict risk level and get recommended actions based on data metrics</p>
+        </div>
+    </div>
+
+    <div class="prediction-grid">
+        <!-- Prediction Form -->
+        <div class="form-section">
+            <div class="form-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                        Input Parameters
+                    </h2>
+                </div>
+                <form id="predictionForm" class="prediction-form">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select a state...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="records">Total Records</label>
+                            <input type="number" id="records" name="records" placeholder="e.g., 50000" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="anomalies">Anomaly Count</label>
+                            <input type="number" id="anomalies" name="anomalies" placeholder="e.g., 2500" required
+                                min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invalid_pin_rate">Invalid PIN Rate</label>
+                            <div class="input-with-suffix">
+                                <input type="number" id="invalid_pin_rate" name="invalid_pin_rate" placeholder="0.00"
+                                    step="0.01" min="0" max="1" value="0">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="duplicate_rate">Duplicate Rate</label>
+                            <div class="input-with-suffix">
+                                <input type="number" id="duplicate_rate" name="duplicate_rate" placeholder="0.00"
+                                    step="0.01" min="0" max="1" value="0">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="missing_dob_rate">Missing DOB Rate</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="missing_dob_rate" name="missing_dob_rate" placeholder="0.00"
+                                step="0.01" min="0" max="1" value="0">
+                            <span class="suffix">%</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg" id="predictBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+                            </svg>
+                            Run Prediction
+                        </button>
+                        <button type="reset" class="btn btn-secondary">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quick Fill Examples -->
+            <div class="examples-card">
+                <h3>Quick Fill Examples</h3>
+                <div class="examples-grid">
+                    <button class="example-btn" data-example="low">
+                        <span class="example-icon low">🟢</span>
+                        Low Risk Sample
+                    </button>
+                    <button class="example-btn" data-example="medium">
+                        <span class="example-icon medium">🟡</span>
+                        Medium Risk Sample
+                    </button>
+                    <button class="example-btn" data-example="high">
+                        <span class="example-icon high">🔴</span>
+                        High Risk Sample
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="results-card" id="resultsCard">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                        Prediction Results
+                    </h2>
+                </div>
+
+                <!-- Placeholder when no results -->
+                <div class="results-placeholder" id="resultsPlaceholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4" />
+                            <path d="M12 8h.01" />
+                        </svg>
+                    </div>
+                    <h3>No Prediction Yet</h3>
+                    <p>Fill out the form and click "Run Prediction" to see risk assessment results</p>
+                </div>
+
+                <!-- Results Display -->
+                <div class="results-content" id="resultsContent" style="display: none;">
+                    <!-- Risk Gauge -->
+                    <div class="risk-gauge" id="riskGauge">
+                        <div class="gauge-circle">
+                            <svg class="gauge-svg" viewBox="0 0 100 100">
+                                <circle class="gauge-bg" cx="50" cy="50" r="45" />
+                                <circle class="gauge-fill" cx="50" cy="50" r="45" id="gaugeFill" />
+                            </svg>
+                            <div class="gauge-center">
+                                <span class="gauge-score" id="gaugeScore">0</span>
+                                <span class="gauge-label">Risk Score</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prediction Category -->
+                    <div class="prediction-result" id="predictionResult">
+                        <span class="result-badge" id="resultBadge">--</span>
+                        <p class="confidence-text">Confidence: <span id="confidenceScore">--</span></p>
+                    </div>
+
+                    <!-- Recommended Action -->
+                    <div class="action-recommendation" id="actionRecommendation">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                            Recommended Action
+                        </h3>
+                        <p id="recommendedAction">--</p>
+                    </div>
+
+                    <!-- Top Features -->
+                    <div class="top-features">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="4" y1="21" x2="4" y2="14" />
+                                <line x1="4" y1="10" x2="4" y2="3" />
+                                <line x1="12" y1="21" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12" y2="3" />
+                                <line x1="20" y1="21" x2="20" y2="16" />
+                                <line x1="20" y1="12" x2="20" y2="3" />
+                            </svg>
+                            Top Contributing Features
+                        </h3>
+                        <div class="features-list" id="featuresList"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="result-actions">
+                        <a href="/policies" class="btn btn-primary">
+                            View Recommended Policies
+                        </a>
+                        <a href="/todo" class="btn btn-secondary">
+                            Create Verification Task
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+{% endblock %}

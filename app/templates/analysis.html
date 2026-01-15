@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analysis.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analysis-container">
+    <!-- Header -->
+    <div class="analysis-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="title-icon">📈</span>
+                Data Analysis & Anomaly Detection
+            </h1>
+            <p class="page-subtitle">Comprehensive analysis of dataset health, patterns, and correlations</p>
+        </div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <span class="stat-value" id="totalAnalyzed">--</span>
+                <span class="stat-label">Records Analyzed</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value" id="analysisDate">--</span>
+                <span class="stat-label">Last Analysis</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Grid -->
+    <div class="analysis-grid">
+        <!-- Anomaly Frequency Chart -->
+        <div class="analysis-card anomaly-chart-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    </svg>
+                    Most Frequent Anomaly Types
+                </h2>
+            </div>
+            <div class="card-content">
+                <canvas id="anomalyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Age Distribution -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Age Distribution
+                </h2>
+            </div>
+            <div class="card-content">
+                <canvas id="ageChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Gender Distribution -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M14.83 14.83a4 4 0 1 1 0-5.66" />
+                    </svg>
+                    Gender Distribution
+                </h2>
+            </div>
+            <div class="card-content">
+                <canvas id="genderChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Correlation Warnings -->
+        <div class="analysis-card correlation-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Correlation Warnings
+                </h2>
+            </div>
+            <div class="card-content">
+                <div class="warnings-list" id="warningsList">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- State-wise Anomaly Distribution -->
+        <div class="analysis-card state-anomaly-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                    </svg>
+                    State-wise Anomaly Distribution
+                </h2>
+            </div>
+            <div class="card-content">
+                <canvas id="stateAnomalyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Suspicious Patterns -->
+        <div class="analysis-card patterns-card">
+            <div class="card-header">
+                <h2 class="card-title danger">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Suspicious Patterns Detected
+                </h2>
+            </div>
+            <div class="card-content">
+                <div class="patterns-list" id="patternsList">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anomaly Types Grid -->
+    <div class="anomaly-types-section">
+        <div class="section-header">
+            <h2 class="section-title">Anomaly Types Overview</h2>
+            <p class="section-subtitle">Detailed breakdown of all detected anomaly categories</p>
+        </div>
+        <div class="anomaly-types-grid" id="anomalyTypes">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+{% endblock %}

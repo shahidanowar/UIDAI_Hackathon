@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Policies & Actions{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/policies.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="policies-container">
+    <!-- Header -->
+    <div class="policies-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="title-icon">🛡️</span>
+                Policies & Recommended Actions
+            </h1>
+            <p class="page-subtitle">Data-driven recommendations to resolve anomalies and improve data quality</p>
+        </div>
+        <div class="header-filters">
+            <select id="severityFilter" class="filter-select">
+                <option value="">All Severities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Policy Stats -->
+    <div class="policy-stats">
+        <div class="stat-card">
+            <span class="stat-value" id="totalPolicies">--</span>
+            <span class="stat-label">Total Policies</span>
+        </div>
+        <div class="stat-card critical">
+            <span class="stat-value" id="criticalCount">--</span>
+            <span class="stat-label">Critical</span>
+        </div>
+        <div class="stat-card high">
+            <span class="stat-value" id="highCount">--</span>
+            <span class="stat-label">High</span>
+        </div>
+        <div class="stat-card medium">
+            <span class="stat-value" id="mediumCount">--</span>
+            <span class="stat-label">Medium</span>
+        </div>
+    </div>
+
+    <!-- Policy Cards -->
+    <div class="policies-grid" id="policiesGrid">
+        <!-- Populated by JavaScript -->
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+        <p>Loading policy recommendations...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        <h3>No Policies Found</h3>
+        <p>There are no policy recommendations matching your filter</p>
+    </div>
+</div>
+
+<!-- Policy Detail Modal -->
+<div class="modal-overlay" id="policyModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Policy Details</h2>
+            <button class="modal-close" id="closeModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Populated by JavaScript -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="createTaskBtn">Create Task</button>
+            <button class="btn btn-secondary" id="closeModalBtn">Close</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/policies.js') }}"></script>
+{% endblock %}

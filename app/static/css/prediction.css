@@ -1,0 +1,322 @@
+/* ====================================
+   Prediction Page Styles
+   ==================================== */
+
+.prediction-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.prediction-header {
+    text-align: center;
+}
+
+.prediction-header .page-title {
+    justify-content: center;
+}
+
+.prediction-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.form-card {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.form-card .card-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(255, 153, 51, 0.05);
+    margin-bottom: 0;
+}
+
+.prediction-form {
+    padding: var(--spacing-lg);
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.form-actions .btn-primary {
+    flex: 1;
+}
+
+.examples-card {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+}
+
+.examples-card h3 {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-md);
+}
+
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.example-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.example-btn:hover {
+    border-color: var(--color-primary);
+}
+
+.results-section {
+    position: sticky;
+    top: 100px;
+}
+
+.results-card {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.results-card .card-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+}
+
+.results-placeholder {
+    padding: var(--spacing-2xl);
+    text-align: center;
+}
+
+.results-placeholder .placeholder-icon svg {
+    width: 64px;
+    height: 64px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+}
+
+.results-content {
+    padding: var(--spacing-lg);
+}
+
+.risk-gauge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.gauge-circle {
+    position: relative;
+    width: 160px;
+    height: 160px;
+}
+
+.gauge-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 8;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1s ease;
+}
+
+.gauge-fill.low {
+    stroke: var(--color-success);
+}
+
+.gauge-fill.medium {
+    stroke: var(--color-warning);
+}
+
+.gauge-fill.high {
+    stroke: var(--color-danger);
+}
+
+.gauge-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.gauge-score {
+    display: block;
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+}
+
+.gauge-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+.prediction-result {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.result-badge {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+}
+
+.result-badge.low {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--color-success);
+}
+
+.result-badge.medium {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--color-warning);
+}
+
+.result-badge.high {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+}
+
+.confidence-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+.action-recommendation {
+    background: var(--color-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.action-recommendation h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.action-recommendation h3 svg {
+    width: 18px;
+    height: 18px;
+    color: var(--color-primary);
+}
+
+.top-features {
+    margin-bottom: var(--spacing-lg);
+}
+
+.top-features h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+}
+
+.feature-name {
+    font-size: var(--font-size-sm);
+}
+
+.feature-value {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.result-actions .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+@media (max-width: 1024px) {
+    .prediction-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-section {
+        position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    .examples-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}To-Do Tasks{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="todo-container">
+    <!-- Header -->
+    <div class="todo-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="title-icon">✅</span>
+                Anomaly Verification Tasks
+            </h1>
+            <p class="page-subtitle">Track and manage anomaly resolution workflows</p>
+        </div>
+        <button class="btn btn-primary" id="addTaskBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Task
+        </button>
+    </div>
+
+    <!-- Task Stats -->
+    <div class="task-stats">
+        <div class="stat-card total">
+            <span class="stat-value" id="totalTasks">--</span>
+            <span class="stat-label">Total Tasks</span>
+        </div>
+        <div class="stat-card pending">
+            <span class="stat-value" id="pendingTasks">--</span>
+            <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-card in-progress">
+            <span class="stat-value" id="inProgressTasks">--</span>
+            <span class="stat-label">In Progress</span>
+        </div>
+        <div class="stat-card done">
+            <span class="stat-value" id="doneTasks">--</span>
+            <span class="stat-label">Completed</span>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="task-filters">
+        <div class="filter-group">
+            <label>Status:</label>
+            <div class="filter-buttons" id="statusFilter">
+                <button class="filter-btn active" data-status="">All</button>
+                <button class="filter-btn" data-status="pending">Pending</button>
+                <button class="filter-btn" data-status="in_progress">In Progress</button>
+                <button class="filter-btn" data-status="done">Done</button>
+            </div>
+        </div>
+        <div class="filter-group">
+            <label>Priority:</label>
+            <select id="priorityFilter" class="filter-select">
+                <option value="">All Priorities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="task-list" id="taskList">
+        <!-- Populated by JavaScript -->
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+        <p>Loading tasks...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4" />
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        </svg>
+        <h3>No Tasks Found</h3>
+        <p>Create a new task to start tracking anomaly verification</p>
+        <button class="btn btn-primary" id="emptyAddBtn">Add First Task</button>
+    </div>
+</div>
+
+<!-- Add/Edit Task Modal -->
+<div class="modal-overlay" id="taskModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Add New Task</h2>
+            <button class="modal-close" id="closeModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <form id="taskForm" class="modal-body">
+            <input type="hidden" id="taskId">
+
+            <div class="form-group">
+                <label for="taskTitle">Title *</label>
+                <input type="text" id="taskTitle" name="title" required
+                    placeholder="e.g., Verify duplicate IDs in Bihar">
+            </div>
+
+            <div class="form-group">
+                <label for="taskDescription">Description</label>
+                <textarea id="taskDescription" name="description" rows="3"
+                    placeholder="Detailed description of the task..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="taskState">State</label>
+                    <select id="taskState" name="state">
+                        <option value="">Select state...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskAnomalyType">Anomaly Type</label>
+                    <select id="taskAnomalyType" name="anomaly_type">
+                        <option value="">Select type...</option>
+                        <option value="Duplicate Aadhaar ID">Duplicate Aadhaar ID</option>
+                        <option value="Invalid PIN Code">Invalid PIN Code</option>
+                        <option value="Missing DOB">Missing DOB</option>
+                        <option value="Invalid Phone Format">Invalid Phone Format</option>
+                        <option value="Impossible Age">Impossible Age</option>
+                        <option value="District-State Mismatch">District-State Mismatch</option>
+                        <option value="Biometric Quality Issues">Biometric Quality Issues</option>
+                        <option value="Suspicious Pattern">Suspicious Pattern</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="taskPriority">Priority</label>
+                    <select id="taskPriority" name="priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskStatus">Status</label>
+                    <select id="taskStatus" name="status">
+                        <option value="pending" selected>Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="done">Done</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="taskAssignee">Assigned To</label>
+                <input type="text" id="taskAssignee" name="assigned_to" placeholder="e.g., Verification Team A">
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button type="submit" form="taskForm" class="btn btn-primary" id="saveTaskBtn">Save Task</button>
+            <button class="btn btn-secondary" id="cancelTaskBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/todo.js') }}"></script>
+{% endblock %}
